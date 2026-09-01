@@ -1,0 +1,11 @@
+node_modules/
+dist/
+release/
+.idea/
+.DS_Store
+npm-debug.log*
+__pycache__/
+*.py[cod]
+.private/
+workbuddy.local.json
+AGENTS.local.md

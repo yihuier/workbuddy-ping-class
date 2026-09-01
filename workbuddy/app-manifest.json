@@ -1,0 +1,126 @@
+{
+  "protocolVersion": 1,
+  "appId": "io.github.yihuier.workbuddy-ping-class",
+  "name": "Ping Class 教学工作台",
+  "version": "0.2.0",
+  "repository": "https://github.com/yihuier/workbuddy-ping-class",
+  "testedWorkBuddySkillLibraryVersions": ["0.5.13"],
+  "page": {
+    "fileName": "Ping Class 教学工作台.html",
+    "appVersionPlaceholder": "__PING_CLASS_APP_VERSION__"
+  },
+  "installationState": {
+    "format": "ping-class-installation-state/v1",
+    "title": "Ping Class 安装记录 · io.github.yihuier.workbuddy-ping-class",
+    "marker": "ping-class-installation-state:v1"
+  },
+  "databaseBindings": {
+    "classes": {
+      "placeholder": "__PING_CLASS_DB_CLASSES__",
+      "schemaVersion": 1,
+      "title": "Ping Class · 班级表",
+      "createSchema": {
+        "title": "Ping Class · 班级表",
+        "properties": [
+          { "name": "班级名称", "config": { "text": "" } },
+          {
+            "name": "年级",
+            "config": {
+              "select": {
+                "options": [
+                  { "text": "初一" },
+                  { "text": "初二" },
+                  { "text": "初三" }
+                ]
+              }
+            }
+          },
+          { "name": "备注", "config": { "text": "" } }
+        ]
+      },
+      "requiredFields": [
+        { "name": "班级名称", "type": "text" },
+        { "name": "年级", "type": "select" },
+        { "name": "备注", "type": "text" }
+      ],
+      "seedPolicy": "never",
+      "seedRecords": []
+    },
+    "students": {
+      "placeholder": "__PING_CLASS_DB_STUDENTS__",
+      "schemaVersion": 1,
+      "title": "Ping Class · 学生表",
+      "createSchema": {
+        "title": "Ping Class · 学生表",
+        "properties": [
+          { "name": "学号", "config": { "text": "" } },
+          { "name": "姓名", "config": { "text": "" } },
+          { "name": "所属班级", "config": { "select": { "options": [] } } },
+          { "name": "备注", "config": { "text": "" } }
+        ]
+      },
+      "requiredFields": [
+        { "name": "学号", "type": "text" },
+        { "name": "姓名", "type": "text" },
+        { "name": "所属班级", "type": "select" },
+        { "name": "备注", "type": "text" }
+      ],
+      "seedPolicy": "never",
+      "seedRecords": []
+    },
+    "lessonSlots": {
+      "placeholder": "__PING_CLASS_DB_LESSON_SLOTS__",
+      "schemaVersion": 1,
+      "title": "Ping Class · 节次配置表",
+      "createSchema": {
+        "title": "Ping Class · 节次配置表",
+        "properties": [
+          { "name": "节次名称", "config": { "text": "" } },
+          { "name": "排序", "config": { "number": 0 } },
+          { "name": "开始时间", "config": { "text": "" } },
+          { "name": "结束时间", "config": { "text": "" } }
+        ]
+      },
+      "requiredFields": [
+        { "name": "节次名称", "type": "text" },
+        { "name": "排序", "type": "number" },
+        { "name": "开始时间", "type": "text" },
+        { "name": "结束时间", "type": "text" }
+      ],
+      "seedPolicy": "install-if-empty",
+      "seedRecords": [
+        { "节次名称": { "text": "第 1 节" }, "排序": { "number": 1 }, "开始时间": { "text": "08:00" }, "结束时间": { "text": "08:45" } },
+        { "节次名称": { "text": "第 2 节" }, "排序": { "number": 2 }, "开始时间": { "text": "08:55" }, "结束时间": { "text": "09:40" } },
+        { "节次名称": { "text": "第 3 节" }, "排序": { "number": 3 }, "开始时间": { "text": "10:00" }, "结束时间": { "text": "10:45" } },
+        { "节次名称": { "text": "第 4 节" }, "排序": { "number": 4 }, "开始时间": { "text": "10:55" }, "结束时间": { "text": "11:40" } },
+        { "节次名称": { "text": "第 5 节" }, "排序": { "number": 5 }, "开始时间": { "text": "14:00" }, "结束时间": { "text": "14:45" } },
+        { "节次名称": { "text": "第 6 节" }, "排序": { "number": 6 }, "开始时间": { "text": "14:55" }, "结束时间": { "text": "15:40" } },
+        { "节次名称": { "text": "第 7 节" }, "排序": { "number": 7 }, "开始时间": { "text": "16:00" }, "结束时间": { "text": "16:45" } },
+        { "节次名称": { "text": "第 8 节" }, "排序": { "number": 8 }, "开始时间": { "text": "16:55" }, "结束时间": { "text": "17:40" } }
+      ]
+    },
+    "weeklyTimetable": {
+      "placeholder": "__PING_CLASS_DB_WEEKLY_TIMETABLE__",
+      "schemaVersion": 1,
+      "title": "Ping Class · 周课表表",
+      "createSchema": {
+        "title": "Ping Class · 周课表表",
+        "properties": [
+          { "name": "班级名称", "config": { "text": "" } },
+          { "name": "星期", "config": { "number": 0 } },
+          { "name": "节次配置ID", "config": { "text": "" } },
+          { "name": "班级ID", "config": { "text": "" } }
+        ]
+      },
+      "requiredFields": [
+        { "name": "班级名称", "type": "text" },
+        { "name": "星期", "type": "number" },
+        { "name": "节次配置ID", "type": "text" },
+        { "name": "班级ID", "type": "text" }
+      ],
+      "seedPolicy": "never",
+      "seedRecords": []
+    }
+  },
+  "migrations": []
+}

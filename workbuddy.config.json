@@ -1,0 +1,7 @@
+{
+  "version": 2,
+  "entry": "dist/index.html",
+  "packageOutput": "release/ping-class-workbuddy.zip",
+  "manifest": "workbuddy/app-manifest.json",
+  "localMapping": "workbuddy.local.json"
+}

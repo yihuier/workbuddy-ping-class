@@ -1,0 +1,58 @@
+[
+  {
+    "_id": "demo_schedule_01",
+    "星期": 1,
+    "节次配置ID": "demo_slot_01",
+    "班级ID": "demo_class_a",
+    "班级名称": "示例七年级 A 班"
+  },
+  {
+    "_id": "demo_schedule_02",
+    "星期": 1,
+    "节次配置ID": "demo_slot_03",
+    "班级ID": "demo_class_b",
+    "班级名称": "示例七年级 B 班"
+  },
+  {
+    "_id": "demo_schedule_03",
+    "星期": 2,
+    "节次配置ID": "demo_slot_02",
+    "班级ID": "demo_class_c",
+    "班级名称": "示例七年级 C 班"
+  },
+  {
+    "_id": "demo_schedule_04",
+    "星期": 3,
+    "节次配置ID": "demo_slot_01",
+    "班级ID": "demo_class_b",
+    "班级名称": "示例七年级 B 班"
+  },
+  {
+    "_id": "demo_schedule_05",
+    "星期": 3,
+    "节次配置ID": "demo_slot_05",
+    "班级ID": "demo_class_a",
+    "班级名称": "示例七年级 A 班"
+  },
+  {
+    "_id": "demo_schedule_06",
+    "星期": 4,
+    "节次配置ID": "demo_slot_03",
+    "班级ID": "demo_class_c",
+    "班级名称": "示例七年级 C 班"
+  },
+  {
+    "_id": "demo_schedule_07",
+    "星期": 5,
+    "节次配置ID": "demo_slot_02",
+    "班级ID": "demo_class_a",
+    "班级名称": "示例七年级 A 班"
+  },
+  {
+    "_id": "demo_schedule_08",
+    "星期": 5,
+    "节次配置ID": "demo_slot_06",
+    "班级ID": "demo_class_b",
+    "班级名称": "示例七年级 B 班"
+  }
+]

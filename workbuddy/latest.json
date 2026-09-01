@@ -1,0 +1,12 @@
+{
+  "protocolVersion": 1,
+  "appId": "io.github.yihuier.workbuddy-ping-class",
+  "channel": "stable",
+  "manifestUrl": "https://github.com/yihuier/workbuddy-ping-class/releases/latest/download/workbuddy-manifest.json",
+  "allowedDownloadHosts": [
+    "github.com",
+    "objects.githubusercontent.com",
+    "raw.githubusercontent.com",
+    "release-assets.githubusercontent.com"
+  ]
+}

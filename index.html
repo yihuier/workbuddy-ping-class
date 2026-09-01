@@ -1,0 +1,459 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="ping-class-app-id" content="io.github.yihuier.workbuddy-ping-class" />
+    <meta name="ping-class-version" content="__PING_CLASS_APP_VERSION__" />
+    <meta
+      name="description"
+      content="教学工作台：周课表、课程安排、班级学生名册、题库与教学资源的统一工作空间。"
+    />
+    <title>教学工作台</title>
+  </head>
+  <body>
+    <div class="layout">
+      <aside class="sidebar">
+        <div class="brand">
+          <div class="brand-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M22 10v6M2 10l10-5 10 5-10 5z" />
+              <path d="M6 12v5c3 3 9 3 12 0v-5" />
+            </svg>
+          </div>
+          <div>
+            <div class="brand-name">教学工作台</div>
+            <div class="brand-subtitle">PING CLASS</div>
+          </div>
+        </div>
+
+        <nav class="nav" id="nav" aria-label="功能模块">
+          <div class="nav-label">功能模块</div>
+
+          <button class="nav-item active" type="button" data-page="schedule" aria-controls="page-schedule" aria-selected="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <rect x="3" y="5" width="18" height="16" rx="2" />
+              <line x1="16" y1="3" x2="16" y2="7" />
+              <line x1="8" y1="3" x2="8" y2="7" />
+              <line x1="3" y1="10" x2="21" y2="10" />
+              <line x1="8" y1="14" x2="8.01" y2="14" />
+              <line x1="12" y1="14" x2="12.01" y2="14" />
+              <line x1="16" y1="14" x2="16.01" y2="14" />
+            </svg>
+            <span>课表管理</span>
+            <span class="tag live">已上线</span>
+          </button>
+
+          <button class="nav-item" type="button" data-page="course" aria-controls="page-course" aria-selected="false">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z" />
+              <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z" />
+            </svg>
+            <span>课程管理</span>
+            <span class="tag">建设中</span>
+          </button>
+
+          <button class="nav-item" type="button" data-page="student" aria-controls="page-student" aria-selected="false">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <rect x="3" y="3" width="7" height="7" rx="1.5" />
+              <rect x="14" y="3" width="7" height="7" rx="1.5" />
+              <rect x="3" y="14" width="7" height="7" rx="1.5" />
+              <rect x="14" y="14" width="7" height="7" rx="1.5" />
+            </svg>
+            <span>班级管理</span>
+            <span class="tag live">已上线</span>
+          </button>
+
+          <button class="nav-item" type="button" data-page="bank" aria-controls="page-bank" aria-selected="false">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <circle cx="12" cy="12" r="10" />
+              <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3" />
+              <line x1="12" y1="17" x2="12.01" y2="17" />
+            </svg>
+            <span>题库管理</span>
+            <span class="tag">建设中</span>
+          </button>
+
+          <button class="nav-item" type="button" data-page="more" aria-controls="page-more" aria-selected="false">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z" />
+              <line x1="12" y1="11" x2="12" y2="17" />
+              <line x1="9" y1="14" x2="15" y2="14" />
+            </svg>
+            <span>教学资源</span>
+            <span class="tag">规划中</span>
+          </button>
+        </nav>
+
+        <div class="sidebar-footer">
+          <span id="runtime-mode" class="runtime-mode">正在连接资料库</span>
+          <span id="today"></span>
+        </div>
+      </aside>
+
+      <main class="content">
+        <section class="page active" id="page-schedule" aria-labelledby="schedule-heading">
+          <div class="page-header">
+            <h1 id="schedule-heading">课表管理</h1>
+            <span class="badge live">已上线</span>
+            <div class="page-header-actions">
+              <button class="secondary-button" id="slot-settings-button" type="button" disabled>
+                节次设置
+              </button>
+              <button class="primary-button" id="add-schedule-button" type="button" disabled>
+                <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <line x1="12" y1="5" x2="12" y2="19" />
+                  <line x1="5" y1="12" x2="19" y2="12" />
+                </svg>
+                新增排课
+              </button>
+            </div>
+            <span class="desc">按周管理固定课表。节次与时间由“节次设置”统一配置，点击日期或课表单元格可查看和编辑当天安排。</span>
+          </div>
+
+          <div class="inline-notice" id="schedule-notice" role="status" aria-live="polite" hidden></div>
+
+          <div class="schedule-toolbar" aria-label="周课表导航">
+            <div class="schedule-toolbar-group">
+              <button class="secondary-button compact-button" id="schedule-today-button" type="button">本周</button>
+              <button class="icon-button bordered-icon-button" id="schedule-prev-button" type="button" aria-label="上一周">
+                <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <polyline points="15 18 9 12 15 6" />
+                </svg>
+              </button>
+              <button class="icon-button bordered-icon-button" id="schedule-next-button" type="button" aria-label="下一周">
+                <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <polyline points="9 18 15 12 9 6" />
+                </svg>
+              </button>
+            </div>
+            <strong id="schedule-week-label" aria-live="polite"></strong>
+            <span
+              class="schedule-toolbar-count"
+              id="schedule-count"
+              data-sp-bindable="database"
+              data-sp-database-id="__PING_CLASS_DB_WEEKLY_TIMETABLE__"
+            ></span>
+          </div>
+
+          <div class="schedule-layout">
+            <div class="schedule-card schedule-week-card">
+              <div class="schedule-grid-wrap" tabindex="0" aria-label="周课表，可横向滚动">
+                <table class="schedule-grid" id="schedule-grid">
+                  <thead>
+                    <tr>
+                      <th scope="col">节次</th>
+                      <th scope="col" colspan="7">正在加载课表…</th>
+                    </tr>
+                  </thead>
+                </table>
+              </div>
+            </div>
+
+            <aside class="schedule-card schedule-agenda" aria-labelledby="schedule-agenda-title">
+              <div class="schedule-agenda-header">
+                <span>当日安排</span>
+                <strong id="schedule-agenda-title"></strong>
+              </div>
+              <div id="schedule-agenda-list" class="schedule-agenda-list">
+                <p class="schedule-empty">正在加载课程安排…</p>
+              </div>
+            </aside>
+          </div>
+
+          <dialog class="modal" id="schedule-dialog" aria-labelledby="schedule-dialog-title">
+            <form class="modal-card" id="schedule-form">
+              <div class="modal-header">
+                <div>
+                  <h2 id="schedule-dialog-title">新增排课</h2>
+                  <p id="schedule-dialog-description">选择星期、节次和班级，保存为每周固定安排。</p>
+                </div>
+                <button class="icon-button" id="close-schedule-dialog" type="button" aria-label="关闭排课窗口">
+                  <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <line x1="18" y1="6" x2="6" y2="18" />
+                    <line x1="6" y1="6" x2="18" y2="18" />
+                  </svg>
+                </button>
+              </div>
+
+              <div class="modal-body">
+                <label class="form-field">
+                  <span>星期 <span aria-hidden="true">*</span></span>
+                  <select
+                    id="schedule-weekday"
+                    name="weekday"
+                    required
+                    data-sp-bindable="database"
+                    data-sp-database-id="__PING_CLASS_DB_WEEKLY_TIMETABLE__"
+                  ></select>
+                </label>
+
+                <label class="form-field">
+                  <span>节次 <span aria-hidden="true">*</span></span>
+                  <select
+                    id="schedule-slot"
+                    name="slot"
+                    required
+                    data-sp-bindable="database"
+                    data-sp-database-id="__PING_CLASS_DB_LESSON_SLOTS__"
+                  ></select>
+                </label>
+
+                <label class="form-field">
+                  <span>班级 <span aria-hidden="true">*</span></span>
+                  <select
+                    id="schedule-class"
+                    name="class"
+                    required
+                    data-sp-bindable="database"
+                    data-sp-database-id="__PING_CLASS_DB_CLASSES__"
+                  ></select>
+                </label>
+
+                <p class="form-status" id="schedule-form-status" role="alert" hidden></p>
+              </div>
+
+              <div class="modal-footer split-footer">
+                <button class="danger-button" id="delete-schedule-button" type="button" hidden>删除排课</button>
+                <span class="modal-footer-spacer"></span>
+                <button class="secondary-button" id="cancel-schedule-dialog" type="button">取消</button>
+                <button class="primary-button" id="submit-schedule-button" type="submit">确认添加</button>
+              </div>
+            </form>
+          </dialog>
+
+          <dialog class="modal slot-modal" id="slot-settings-dialog" aria-labelledby="slot-settings-title">
+            <div class="modal-card">
+              <div class="modal-header">
+                <div>
+                  <h2 id="slot-settings-title">节次设置</h2>
+                  <p>节次决定课表左侧的行与排序；修改时间后，周视图会立即同步。</p>
+                </div>
+                <button class="icon-button" id="close-slot-settings" type="button" aria-label="关闭节次设置窗口">
+                  <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <line x1="18" y1="6" x2="6" y2="18" />
+                    <line x1="6" y1="6" x2="18" y2="18" />
+                  </svg>
+                </button>
+              </div>
+
+              <div class="slot-settings-body">
+                <div class="slot-settings-list" id="slot-settings-list"></div>
+
+                <form class="slot-editor" id="slot-form">
+                  <div class="slot-editor-heading">
+                    <strong id="slot-form-title">新增节次</strong>
+                    <span>时间使用 24 小时制</span>
+                  </div>
+                  <div class="slot-form-grid">
+                    <label class="form-field">
+                      <span>节次名称 <span aria-hidden="true">*</span></span>
+                      <input id="slot-name" name="slotName" type="text" maxlength="30" placeholder="例如：第 1 节" autocomplete="off" required />
+                    </label>
+                    <label class="form-field">
+                      <span>排序 <span aria-hidden="true">*</span></span>
+                      <input id="slot-order" name="slotOrder" type="number" min="1" max="99" step="1" required />
+                    </label>
+                    <label class="form-field">
+                      <span>开始时间 <span aria-hidden="true">*</span></span>
+                      <input id="slot-start-time" name="slotStartTime" type="time" required />
+                    </label>
+                    <label class="form-field">
+                      <span>结束时间 <span aria-hidden="true">*</span></span>
+                      <input id="slot-end-time" name="slotEndTime" type="time" required />
+                    </label>
+                  </div>
+                  <p class="form-status" id="slot-form-status" role="alert" hidden></p>
+                  <div class="slot-editor-actions">
+                    <button class="secondary-button" id="cancel-slot-edit" type="button" hidden>取消编辑</button>
+                    <button class="primary-button" id="submit-slot-button" type="submit">添加节次</button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </dialog>
+        </section>
+
+        <section class="page" id="page-course" aria-labelledby="course-heading">
+          <div class="page-header">
+            <h1 id="course-heading">课程管理</h1>
+            <span class="badge">建设中</span>
+            <span class="desc">授课安排：某班某天的一节课，选择班级与课件进行排课，进度按班独立跟踪。</span>
+          </div>
+          <div class="placeholder-card">
+            <div class="placeholder-icon pi-course" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z" />
+                <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z" />
+              </svg>
+            </div>
+            <h2>课程模块建设中</h2>
+            <p>这里将展示你的授课安排列表：每行对应某班某天的一节课，选定课件即可排课，同一课件多班复用。</p>
+            <span class="hint">建成后将自动展示课程列表</span>
+          </div>
+        </section>
+
+        <section class="page" id="page-student" aria-labelledby="student-heading">
+          <div class="page-header">
+            <h1 id="student-heading">班级管理</h1>
+            <span class="badge live">已上线</span>
+            <button class="primary-button page-header-action" id="add-class-button" type="button" disabled>
+              <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <line x1="12" y1="5" x2="12" y2="19" />
+                <line x1="5" y1="12" x2="19" y2="12" />
+              </svg>
+              新增班级
+            </button>
+            <span class="desc">全校学生名册：支持按班级过滤、按姓名或学号查找，数据与学生表实时同步。</span>
+          </div>
+
+          <div class="inline-notice" id="class-notice" role="status" aria-live="polite" hidden></div>
+
+          <div class="table-panel">
+            <div class="table-toolbar">
+              <label class="search-box">
+                <span class="sr-only">搜索姓名或学号</span>
+                <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <circle cx="11" cy="11" r="8" />
+                  <line x1="21" y1="21" x2="16.65" y2="16.65" />
+                </svg>
+                <input type="search" id="search-input" placeholder="搜索姓名或学号…" autocomplete="off" />
+              </label>
+              <div class="filter-chips" id="filter-chips" aria-label="按班级筛选"></div>
+              <span
+                class="toolbar-count"
+                id="result-count"
+                aria-live="polite"
+                data-sp-bindable="database"
+                data-sp-database-id="__PING_CLASS_DB_STUDENTS__"
+              ></span>
+            </div>
+
+            <div class="table-wrap" tabindex="0" aria-label="学生名册，可横向滚动">
+              <table class="stu-table">
+                <thead>
+                  <tr>
+                    <th scope="col">班级</th>
+                    <th scope="col">学号</th>
+                    <th scope="col">姓名</th>
+                    <th scope="col">备注</th>
+                  </tr>
+                </thead>
+                <tbody id="stu-tbody">
+                  <tr>
+                    <td
+                      colspan="4"
+                      class="table-loading"
+                      data-sp-bindable="database"
+                      data-sp-database-id="__PING_CLASS_DB_STUDENTS__"
+                    >正在加载学生数据…</td>
+                  </tr>
+                </tbody>
+              </table>
+              <div class="empty-state" id="empty-state" hidden></div>
+            </div>
+
+            <div class="table-footer">
+              <span
+                id="footer-info"
+                data-sp-bindable="database"
+                data-sp-database-id="__PING_CLASS_DB_STUDENTS__"
+              ></span>
+              <span>数据源：学生表 · 实时同步</span>
+            </div>
+          </div>
+
+          <dialog class="modal" id="add-class-dialog" aria-labelledby="add-class-title">
+            <form class="modal-card" id="add-class-form">
+              <div class="modal-header">
+                <div>
+                  <h2 id="add-class-title">新增班级</h2>
+                  <p>班级将保存到班级表，并立即出现在筛选列表中。</p>
+                </div>
+                <button class="icon-button" id="close-class-dialog" type="button" aria-label="关闭新增班级窗口">
+                  <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <line x1="18" y1="6" x2="6" y2="18" />
+                    <line x1="6" y1="6" x2="18" y2="18" />
+                  </svg>
+                </button>
+              </div>
+
+              <div class="modal-body">
+                <label class="form-field">
+                  <span>班级名称 <span aria-hidden="true">*</span></span>
+                  <input name="className" type="text" maxlength="50" placeholder="例如：初一(4)班" autocomplete="off" required />
+                </label>
+
+                <label class="form-field">
+                  <span>年级 <span aria-hidden="true">*</span></span>
+                  <select
+                    name="grade"
+                    required
+                    data-sp-bindable="database"
+                    data-sp-database-id="__PING_CLASS_DB_CLASSES__"
+                  >
+                    <option value="">请选择年级</option>
+                  </select>
+                </label>
+
+                <label class="form-field">
+                  <span>备注</span>
+                  <textarea name="note" rows="3" maxlength="200" placeholder="选填，例如：班主任或教室信息"></textarea>
+                </label>
+
+                <p class="form-status" id="class-form-status" role="alert" hidden></p>
+              </div>
+
+              <div class="modal-footer">
+                <button class="secondary-button" id="cancel-add-class" type="button">取消</button>
+                <button class="primary-button" id="submit-add-class" type="submit">确认添加</button>
+              </div>
+            </form>
+          </dialog>
+        </section>
+
+        <section class="page" id="page-bank" aria-labelledby="bank-heading">
+          <div class="page-header">
+            <h1 id="bank-heading">题库管理</h1>
+            <span class="badge">建设中</span>
+            <span class="desc">按课程与知识点归类的题目库，支持难度标注，可被课程页面动态调用。</span>
+          </div>
+          <div class="placeholder-card">
+            <div class="placeholder-icon pi-bank" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10" />
+                <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3" />
+                <line x1="12" y1="17" x2="12.01" y2="17" />
+              </svg>
+            </div>
+            <h2>题库模块建设中</h2>
+            <p>这里将展示按课程分类的题目列表，支持按知识点、难度筛选，课堂演示页可直接调用。</p>
+            <span class="hint">建成后将自动展示题目列表</span>
+          </div>
+        </section>
+
+        <section class="page" id="page-more" aria-labelledby="more-heading">
+          <div class="page-header">
+            <h1 id="more-heading">教学资源</h1>
+            <span class="badge">规划中</span>
+            <span class="desc">备课笔记、课件素材与教学参考收藏，持续扩展的工作空间。</span>
+          </div>
+          <div class="placeholder-card">
+            <div class="placeholder-icon pi-more" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z" />
+                <line x1="12" y1="11" x2="12" y2="17" />
+                <line x1="9" y1="14" x2="15" y2="14" />
+              </svg>
+            </div>
+            <h2>资源模块规划中</h2>
+            <p>这里将汇聚备课笔记、课件素材与网页收藏，作为教学资源的统一入口。</p>
+            <span class="hint">按需开通，持续扩展</span>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>
