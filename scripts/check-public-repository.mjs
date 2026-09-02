@@ -1,6 +1,12 @@
 import { existsSync, readFileSync, statSync } from "node:fs";
 import { extname, resolve } from "node:path";
-import { normalizeMapping, readJson, run, validateManifest } from "./lib/workbuddy-release.mjs";
+import {
+  DATABASE_ID_RE,
+  isObject,
+  readJson,
+  run,
+  validateManifest,
+} from "./lib/workbuddy-release.mjs";
 
 const projectRoot = resolve(import.meta.dirname, "..");
 const config = readJson(resolve(projectRoot, "workbuddy.config.json"), "workbuddy.config.json");
@@ -65,8 +71,19 @@ try {
 
   const localMappingPath = resolve(projectRoot, config.localMapping);
   if (existsSync(localMappingPath)) {
-    const localMapping = normalizeMapping(readJson(localMappingPath, config.localMapping), manifest);
-    for (const [alias, databaseId] of Object.entries(localMapping)) {
+    const rawLocalMapping = readJson(localMappingPath, config.localMapping);
+    if (!isObject(rawLocalMapping)) {
+      throw new Error(`${config.localMapping} 必须是 JSON 对象`);
+    }
+    if ("databaseBindings" in rawLocalMapping && !isObject(rawLocalMapping.databaseBindings)) {
+      throw new Error(`${config.localMapping}.databaseBindings 必须是 JSON 对象`);
+    }
+    const localMapping = isObject(rawLocalMapping.databaseBindings)
+      ? rawLocalMapping.databaseBindings
+      : rawLocalMapping;
+    for (const [alias, rawValue] of Object.entries(localMapping)) {
+      const databaseId = isObject(rawValue) ? rawValue.id : rawValue;
+      if (typeof databaseId !== "string" || !DATABASE_ID_RE.test(databaseId)) continue;
       const leakedFiles = [...contents]
         .filter(([, content]) => content.includes(databaseId))
         .map(([path]) => path);
@@ -117,6 +134,30 @@ try {
       ) {
         throw new Error("公开学生 Mock 必须使用明确的示例姓名和 DEMO 学号");
       }
+    }
+  }
+
+  const gradesPath = "public/mock/data/grades.json";
+  if (isObject(manifest.databaseBindings.grades)) {
+    if (!contents.has(gradesPath)) {
+      throw new Error(`缺少年级 Mock 数据：${gradesPath}`);
+    }
+    const gradeRecords = JSON.parse(contents.get(gradesPath));
+    if (!Array.isArray(gradeRecords)) {
+      throw new Error(`${gradesPath} 必须是 JSON 数组`);
+    }
+    const actualDefaults = gradeRecords.map((record) => ({
+      name: record["年级名称"],
+      order: record["排序"],
+      visible: record["新增班级时展示"],
+    }));
+    const expectedDefaults = manifest.databaseBindings.grades.seedRecords.map((record) => ({
+      name: record["年级名称"]?.text,
+      order: record["排序"]?.number,
+      visible: record["新增班级时展示"]?.checkbox,
+    }));
+    if (JSON.stringify(actualDefaults) !== JSON.stringify(expectedDefaults)) {
+      throw new Error("年级 Mock 默认值必须与 manifest seedRecords 完全一致");
     }
   }
 

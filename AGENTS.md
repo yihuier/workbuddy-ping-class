@@ -6,7 +6,7 @@
 
 Ping Class 是面向 WorkBuddy 资料库 Page 的 TypeScript 教学工作台。源码由 Vite 组织，开发环境安装与线上 `window.__SMART_PAGE__.database` 形态一致的 Mock，生产环境输出可按用户数据库映射渲染的单文件 HTML 模板。
 
-当前已实现课表管理和班级管理；课程管理、题库管理与教学资源仍是可继续开发的模块。当前页面行为只是版本现状，不是对月视图、多教师、临时调课、新页面或新资料表的永久限制。
+当前已实现课表管理和班级管理；新增班级的年级选项来自独立年级配置表，并使用自定义 Combobox。课程管理、题库管理与教学资源仍是可继续开发的模块。当前页面行为只是版本现状，不是对月视图、多教师、临时调课、新页面或新资料表的永久限制。
 
 ## 事实来源与优先级
 
@@ -21,7 +21,7 @@ WorkBuddy skill-library 版本变化时，先比较 Database SDK、HTML 导入�
 
 - `workbuddy/app-manifest.json` 是应用版本、数据库 binding、canonical schema、seed policy 和 migration 的唯一公开声明源。
 - `databaseBindings` 是可扩展集合，不得在安装器、构建脚本、状态文档或说明文字中假设固定数量。
-- 当前业务使用 `classes`、`students`、`lessonSlots` 和 `weeklyTimetable` 等 alias；它们是当前功能依赖，不是封闭清单。
+- 当前业务使用 `classes`、`grades`、`students`、`lessonSlots` 和 `weeklyTimetable` 等 alias；它们是当前功能依赖，不是封闭清单。
 - 源码中的 `databaseId` 必须直接使用对应 manifest placeholder 字符串字面量。目标用户安装时再把所有 placeholder 渲染为该用户的实际 databaseId，确保官方解析器可识别。
 - `workbuddy.config.json` 只保存公共构建路径，不保存 databaseId。
 - 维护者个人映射只写入已忽略的 `workbuddy.local.json`。不得把真实 databaseId、真实 schema 快照或用户业务数据提交到公共仓库。

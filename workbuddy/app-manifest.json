@@ -2,7 +2,7 @@
   "protocolVersion": 1,
   "appId": "io.github.yihuier.workbuddy-ping-class",
   "name": "Ping Class 教学工作台",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "repository": "https://github.com/yihuier/workbuddy-ping-class",
   "testedWorkBuddySkillLibraryVersions": ["0.5.13"],
   "page": {
@@ -17,34 +17,60 @@
   "databaseBindings": {
     "classes": {
       "placeholder": "__PING_CLASS_DB_CLASSES__",
-      "schemaVersion": 1,
+      "schemaVersion": 2,
       "title": "Ping Class · 班级表",
       "createSchema": {
         "title": "Ping Class · 班级表",
         "properties": [
           { "name": "班级名称", "config": { "text": "" } },
-          {
-            "name": "年级",
-            "config": {
-              "select": {
-                "options": [
-                  { "text": "初一" },
-                  { "text": "初二" },
-                  { "text": "初三" }
-                ]
-              }
-            }
-          },
+          { "name": "年级配置ID", "config": { "text": "" } },
+          { "name": "年级名称", "config": { "text": "" } },
           { "name": "备注", "config": { "text": "" } }
         ]
       },
       "requiredFields": [
         { "name": "班级名称", "type": "text" },
-        { "name": "年级", "type": "select" },
+        { "name": "年级配置ID", "type": "text" },
+        { "name": "年级名称", "type": "text" },
         { "name": "备注", "type": "text" }
       ],
       "seedPolicy": "never",
       "seedRecords": []
+    },
+    "grades": {
+      "placeholder": "__PING_CLASS_DB_GRADES__",
+      "schemaVersion": 1,
+      "title": "Ping Class · 年级配置表",
+      "createSchema": {
+        "title": "Ping Class · 年级配置表",
+        "properties": [
+          { "name": "年级名称", "config": { "text": "" } },
+          { "name": "排序", "config": { "number": 0 } },
+          { "name": "新增班级时展示", "config": { "checkbox": false } },
+          { "name": "备注", "config": { "text": "" } }
+        ]
+      },
+      "requiredFields": [
+        { "name": "年级名称", "type": "text" },
+        { "name": "排序", "type": "number" },
+        { "name": "新增班级时展示", "type": "checkbox" },
+        { "name": "备注", "type": "text" }
+      ],
+      "seedPolicy": "install-if-empty",
+      "seedRecords": [
+        { "年级名称": { "text": "一年级" }, "排序": { "number": 1 }, "新增班级时展示": { "checkbox": true }, "备注": { "text": "" } },
+        { "年级名称": { "text": "二年级" }, "排序": { "number": 2 }, "新增班级时展示": { "checkbox": true }, "备注": { "text": "" } },
+        { "年级名称": { "text": "三年级" }, "排序": { "number": 3 }, "新增班级时展示": { "checkbox": true }, "备注": { "text": "" } },
+        { "年级名称": { "text": "四年级" }, "排序": { "number": 4 }, "新增班级时展示": { "checkbox": true }, "备注": { "text": "" } },
+        { "年级名称": { "text": "五年级" }, "排序": { "number": 5 }, "新增班级时展示": { "checkbox": true }, "备注": { "text": "" } },
+        { "年级名称": { "text": "六年级" }, "排序": { "number": 6 }, "新增班级时展示": { "checkbox": true }, "备注": { "text": "" } },
+        { "年级名称": { "text": "初一" }, "排序": { "number": 7 }, "新增班级时展示": { "checkbox": true }, "备注": { "text": "" } },
+        { "年级名称": { "text": "初二" }, "排序": { "number": 8 }, "新增班级时展示": { "checkbox": true }, "备注": { "text": "" } },
+        { "年级名称": { "text": "初三" }, "排序": { "number": 9 }, "新增班级时展示": { "checkbox": true }, "备注": { "text": "" } },
+        { "年级名称": { "text": "高一" }, "排序": { "number": 10 }, "新增班级时展示": { "checkbox": true }, "备注": { "text": "" } },
+        { "年级名称": { "text": "高二" }, "排序": { "number": 11 }, "新增班级时展示": { "checkbox": true }, "备注": { "text": "" } },
+        { "年级名称": { "text": "高三" }, "排序": { "number": 12 }, "新增班级时展示": { "checkbox": true }, "备注": { "text": "" } }
+      ]
     },
     "students": {
       "placeholder": "__PING_CLASS_DB_STUDENTS__",
@@ -122,5 +148,23 @@
       "seedRecords": []
     }
   },
-  "migrations": []
+  "migrations": [
+    {
+      "database": "classes",
+      "fromSchemaVersion": 1,
+      "toSchemaVersion": 2,
+      "operations": [
+        { "type": "addField", "property": { "name": "年级配置ID", "config": { "text": "" } } },
+        { "type": "addField", "property": { "name": "年级名称", "config": { "text": "" } } }
+      ]
+    },
+    {
+      "database": "grades",
+      "fromSchemaVersion": 0,
+      "toSchemaVersion": 1,
+      "operations": [
+        { "type": "createDatabase" }
+      ]
+    }
+  ]
 }

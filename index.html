@@ -384,17 +384,44 @@
                   <input name="className" type="text" maxlength="50" placeholder="例如：初一(4)班" autocomplete="off" required />
                 </label>
 
-                <label class="form-field">
-                  <span>年级 <span aria-hidden="true">*</span></span>
-                  <select
-                    name="grade"
-                    required
+                <div class="form-field">
+                  <span id="class-grade-label">年级 <span aria-hidden="true">*</span></span>
+                  <div
+                    class="grade-combobox"
+                    id="class-grade-combobox"
                     data-sp-bindable="database"
-                    data-sp-database-id="__PING_CLASS_DB_CLASSES__"
+                    data-sp-database-id="__PING_CLASS_DB_GRADES__"
                   >
-                    <option value="">请选择年级</option>
-                  </select>
-                </label>
+                    <button
+                      class="grade-combobox-trigger"
+                      id="class-grade-trigger"
+                      type="button"
+                      role="combobox"
+                      aria-autocomplete="none"
+                      aria-expanded="false"
+                      aria-haspopup="listbox"
+                      aria-controls="class-grade-listbox"
+                      aria-labelledby="class-grade-label class-grade-value"
+                      aria-describedby="class-grade-help"
+                      aria-invalid="false"
+                      disabled
+                    >
+                      <span class="grade-combobox-value placeholder" id="class-grade-value">正在加载年级…</span>
+                      <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <polyline points="6 9 12 15 18 9" />
+                      </svg>
+                    </button>
+                    <div
+                      class="grade-combobox-listbox"
+                      id="class-grade-listbox"
+                      role="listbox"
+                      aria-labelledby="class-grade-label"
+                      tabindex="-1"
+                      hidden
+                    ></div>
+                  </div>
+                  <span class="form-field-hint" id="class-grade-help">选项来自年级配置表；关闭“新增班级时展示”即可隐藏。</span>
+                </div>
 
                 <label class="form-field">
                   <span>备注</span>

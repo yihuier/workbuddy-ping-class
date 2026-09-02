@@ -5,7 +5,7 @@ Ping Class 是运行在 WorkBuddy 资料库 Page 中的 TypeScript 教学工作�
 当前版本包含：
 
 - 课表管理：固定周视图、日期详情、节次设置以及排课新增、编辑和删除；
-- 班级管理：班级与学生查询、筛选、搜索以及新增班级；
+- 班级管理：班级与学生查询、筛选、搜索以及新增班级；新增班级的年级选项来自独立配置表，并支持隐藏、排序和自定义；
 - 课程管理、题库管理和教学资源的后续功能入口。
 
 当前实现不是功能上限。新增模块可以增加页面、交互、数据库 binding 和连续迁移；发布工具与安装协议不会假设数据库数量。
@@ -17,6 +17,7 @@ Ping Class 是运行在 WorkBuddy 资料库 Page 中的 TypeScript 教学工作�
 | Alias | 用途 |
 | --- | --- |
 | `classes` | 班级基础信息 |
+| `grades` | 年级名称、排序和新增班级时是否展示 |
 | `students` | 学生名册 |
 | `lessonSlots` | 节次名称与时间配置 |
 | `weeklyTimetable` | 每周固定排课 |
@@ -58,7 +59,7 @@ WORKBUDDY_SKILL_LIBRARY=/path/to/skill-library npm run verify:workbuddy:official
 
 ## 给自己的 WorkBuddy 打包
 
-首次生成本地映射模板：
+生成本地映射模板，或在 manifest 新增 binding 后补齐缺失项：
 
 ```bash
 npm run setup:local
