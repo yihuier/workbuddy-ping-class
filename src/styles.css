@@ -794,31 +794,15 @@ textarea:focus-visible,
 
 .courseware-card-header {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: space-between;
   gap: 12px;
   margin-bottom: 15px;
 }
 
-.courseware-format-badge {
-  display: inline-flex;
-  align-items: center;
-  min-height: 24px;
-  padding: 3px 9px;
-  font-size: 10px;
-  font-weight: 750;
-  letter-spacing: 0.08em;
-  border-radius: 7px;
-}
-
-.courseware-format-badge.format-html {
-  color: #1d4ed8;
-  background: #eff6ff;
-}
-
-.courseware-format-badge.format-zip {
-  color: #7c2d12;
-  background: #fff7ed;
+.courseware-card-header h2 {
+  flex: 1;
+  min-width: 0;
 }
 
 .courseware-version {
@@ -833,16 +817,6 @@ textarea:focus-visible,
   font-size: 16px;
   font-weight: 650;
   line-height: 1.45;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.courseware-file-name {
-  margin: 6px 0 15px;
-  overflow: hidden;
-  color: var(--text-muted);
-  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-  font-size: 10.5px;
   text-overflow: ellipsis;
   white-space: nowrap;
 }

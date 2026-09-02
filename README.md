@@ -6,7 +6,7 @@ Ping Class 是运行在 WorkBuddy 资料库 Page 中的 TypeScript 教学工作�
 
 - 课表管理：固定周视图、日期详情、节次设置以及排课新增、编辑和删除；
 - 班级管理：班级与学生查询、筛选、搜索以及新增班级；新增班级的年级选项来自独立配置表，并支持隐藏、排序和自定义；
-- 课件管理：查询、筛选、打开和维护课件索引，并通过 WorkBuddy Agent 导入或覆盖更新 HTML、HTM、ZIP 网页课件；
+- 课件管理：查询、打开和维护课件索引，并通过 WorkBuddy Agent 导入或覆盖更新网页课件；
 - 课程管理、题库管理和教学资源的后续功能入口。
 
 当前实现不是功能上限。新增模块可以增加页面、交互、数据库 binding 和连续迁移；发布工具与安装协议不会假设数据库数量。
@@ -90,7 +90,7 @@ Agent 会动态处理当前 manifest 的全部 binding：首次安装创建目�
 
 课件文件本身保存为独立 WorkBuddy Page，`courseware` 资料表只保存索引。不要把 ZIP、HTML Base64 或本地路径写进资料表。
 
-在课件管理页面点击“导入课件”，复制页面生成的指令，然后粘贴到 WorkBuddy 对话并附加一个 HTML、HTM 或 ZIP 文件。Agent 会按 [`workbuddy/COURSEWARE_IMPORT.md`](./workbuddy/COURSEWARE_IMPORT.md) 校验文件、导入或更新 Page，并在成功后同步当前用户自己的课件表。
+在课件管理页面点击“导入课件”，复制页面生成的指令，然后粘贴到 WorkBuddy 对话并附加课件文件。Agent 会按 [`workbuddy/COURSEWARE_IMPORT.md`](./workbuddy/COURSEWARE_IMPORT.md) 自动识别和校验文件、导入或更新 Page，并在成功后同步当前用户自己的课件表。
 
 当前 WorkBuddy Page SDK 没有把浏览器 `File` 直接导入 Page 的接口，因此页面不会展示一个无法真正持久化的文件选择框。文件上限和 ZIP 结构以用户当前 WorkBuddy skill-library 的官方 `page/import-flow.md` 为准。
 

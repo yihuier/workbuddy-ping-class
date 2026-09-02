@@ -3,18 +3,12 @@ import type { DatabaseRecord, DatabaseSchema, UrlValue } from "./workbuddy";
 const COURSEWARE_DATABASE_ID = "__PING_CLASS_DB_COURSEWARE__";
 const COURSEWARE_IMPORT_PROTOCOL_URL =
   "https://raw.githubusercontent.com/yihuier/workbuddy-ping-class/main/workbuddy/COURSEWARE_IMPORT.md";
-const COURSEWARE_FORMATS = ["全部", "HTML", "ZIP"] as const;
-
-type CoursewareFilter = (typeof COURSEWARE_FORMATS)[number];
-type CoursewareFormat = Exclude<CoursewareFilter, "全部">;
 
 interface CoursewareItem {
   id: string;
   name: string;
   pageNodeBlockId: string;
   link: UrlValue | null;
-  originalFileName: string;
-  format: CoursewareFormat;
   version: number;
   updatedAt: string;
   note: string;
@@ -30,7 +24,6 @@ const elements = {
   importButton: requiredElement<HTMLButtonElement>("#import-courseware-button"),
   refreshButton: requiredElement<HTMLButtonElement>("#refresh-courseware-button"),
   search: requiredElement<HTMLInputElement>("#courseware-search-input"),
-  filters: requiredElement<HTMLDivElement>("#courseware-filters"),
   count: requiredElement<HTMLSpanElement>("#courseware-count"),
   grid: requiredElement<HTMLDivElement>("#courseware-grid"),
   empty: requiredElement<HTMLDivElement>("#courseware-empty"),
@@ -62,7 +55,6 @@ const elements = {
 };
 
 let coursewareItems: CoursewareItem[] = [];
-let activeFilter: CoursewareFilter = "全部";
 let searchText = "";
 let editingItem: CoursewareItem | null = null;
 let removingItem: CoursewareItem | null = null;
@@ -101,10 +93,6 @@ function valueAsUrl(record: DatabaseRecord, fieldName: string): UrlValue | null 
   return null;
 }
 
-function normalizeFormat(value: string): CoursewareFormat {
-  return value.toUpperCase() === "ZIP" ? "ZIP" : "HTML";
-}
-
 function toCoursewareItem(record: DatabaseRecord): CoursewareItem {
   const originalFileName = valueAsText(record, "原始文件名").trim();
   return {
@@ -112,8 +100,6 @@ function toCoursewareItem(record: DatabaseRecord): CoursewareItem {
     name: valueAsText(record, "课件名称").trim() || originalFileName || "未命名课件",
     pageNodeBlockId: valueAsText(record, "Page节点ID").trim(),
     link: valueAsUrl(record, "课件链接"),
-    originalFileName,
-    format: normalizeFormat(valueAsText(record, "文件格式")),
     version: Math.max(1, Math.trunc(valueAsNumber(record, "版本号"))),
     updatedAt: valueAsText(record, "更新时间"),
     note: valueAsText(record, "备注"),
@@ -203,41 +189,10 @@ async function queryAllCourseware(): Promise<DatabaseRecord[]> {
 function filteredItems(): CoursewareItem[] {
   const keyword = searchText.trim().toLocaleLowerCase("zh-CN");
   return coursewareItems.filter((item) => {
-    if (activeFilter !== "全部" && item.format !== activeFilter) return false;
     if (!keyword) return true;
-    return [item.name, item.originalFileName, item.note]
+    return [item.name, item.note]
       .some((value) => value.toLocaleLowerCase("zh-CN").includes(keyword));
   });
-}
-
-function renderFilters(): void {
-  const counts: Record<CoursewareFilter, number> = {
-    全部: coursewareItems.length,
-    HTML: coursewareItems.filter((item) => item.format === "HTML").length,
-    ZIP: coursewareItems.filter((item) => item.format === "ZIP").length,
-  };
-  const buttons = COURSEWARE_FORMATS.map((format) => {
-    const button = document.createElement("button");
-    button.type = "button";
-    button.className = `chip${format === activeFilter ? " active" : ""}`;
-    button.setAttribute("aria-pressed", String(format === activeFilter));
-
-    const label = document.createElement("span");
-    label.textContent = format;
-    const count = document.createElement("span");
-    count.className = "chip-count";
-    count.textContent = String(counts[format]);
-    setDatabaseBinding(count);
-
-    button.append(label, count);
-    button.addEventListener("click", () => {
-      activeFilter = format;
-      renderFilters();
-      renderCourseware();
-    });
-    return button;
-  });
-  elements.filters.replaceChildren(...buttons);
 }
 
 function createMetaItem(labelText: string, valueText: string): HTMLDivElement {
@@ -269,19 +224,12 @@ function createCoursewareCard(item: CoursewareItem): HTMLElement {
 
   const header = document.createElement("div");
   header.className = "courseware-card-header";
-  const formatBadge = document.createElement("span");
-  formatBadge.className = `courseware-format-badge format-${item.format.toLowerCase()}`;
-  formatBadge.textContent = item.format;
+  const title = document.createElement("h2");
+  title.textContent = item.name;
   const version = document.createElement("span");
   version.className = "courseware-version";
   version.textContent = `v${item.version}`;
-  header.append(formatBadge, version);
-
-  const title = document.createElement("h2");
-  title.textContent = item.name;
-  const fileName = document.createElement("p");
-  fileName.className = "courseware-file-name";
-  fileName.textContent = item.originalFileName || "未记录原始文件名";
+  header.append(title, version);
 
   const meta = document.createElement("div");
   meta.className = "courseware-card-meta";
@@ -316,11 +264,11 @@ function createCoursewareCard(item: CoursewareItem): HTMLElement {
   }
   actions.append(
     actionButton("编辑信息", "courseware-card-link", () => openEditDialog(item)),
-    actionButton("更新文件", "courseware-card-link", () => openImportDialog(item)),
+    actionButton("更新课件", "courseware-card-link", () => openImportDialog(item)),
     actionButton("移除索引", "courseware-card-link danger", () => openRemoveDialog(item)),
   );
 
-  card.append(header, title, fileName, meta, note, actions);
+  card.append(header, meta, note, actions);
   return card;
 }
 
@@ -333,9 +281,7 @@ function renderCourseware(): void {
     const keyword = searchText.trim();
     elements.empty.textContent = keyword
       ? `没有找到与「${keyword}」匹配的课件`
-      : activeFilter === "全部"
-        ? "课件库还是空的，可以通过 WorkBuddy Agent 导入第一个 HTML 或 ZIP 课件。"
-        : `当前没有 ${activeFilter} 格式的课件。`;
+      : "课件库还是空的，可以通过 WorkBuddy Agent 导入第一个课件。";
     setDatabaseBinding(elements.empty);
     return;
   }
@@ -380,7 +326,6 @@ async function loadCourseware(): Promise<void> {
     ]);
     validateCoursewareSchema(schema);
     coursewareItems = rows.map(toCoursewareItem);
-    renderFilters();
     renderCourseware();
     elements.importButton.disabled = false;
     elements.refreshButton.disabled = false;
@@ -396,13 +341,13 @@ async function loadCourseware(): Promise<void> {
 function importPrompt(item?: CoursewareItem): string {
   if (!item) {
     return [
-      "请按照 Ping Class 的课件导入与更新协议，将我附带的 HTML、HTM 或 ZIP 导入当前 Ping Class 的课件库。",
+      "请按照 Ping Class 的课件导入与更新协议，将我附带的课件文件导入当前 Ping Class 的课件库。",
       "我授权你创建一个新的课件 Page，并在导入成功后向当前安装的 courseware 资料表新增索引记录；我不授权你发布课件、删除任何 Page、覆盖已有课件或修改其它业务数据。",
       `协议：${COURSEWARE_IMPORT_PROTOCOL_URL}`,
     ].join("\n\n");
   }
   return [
-    "请按照 Ping Class 的课件导入与更新协议，用我附带的 HTML、HTM 或 ZIP 更新下面这一个课件。",
+    "请按照 Ping Class 的课件导入与更新协议，用我附带的课件文件更新下面这一个课件。",
     `课件记录ID：${item.id}`,
     `Page节点ID：${item.pageNodeBlockId}`,
     `当前版本：${item.version}`,
@@ -413,10 +358,10 @@ function importPrompt(item?: CoursewareItem): string {
 
 function openImportDialog(item?: CoursewareItem): void {
   const updating = Boolean(item);
-  elements.importTitle.textContent = updating ? "更新课件文件" : "导入新课件";
+  elements.importTitle.textContent = updating ? "更新课件" : "导入新课件";
   elements.importDescription.textContent = updating
     ? `更新「${item?.name ?? ""}」的既有 WorkBuddy Page，并保留同一条课件索引。`
-    : "通过 WorkBuddy Agent 安全导入 HTML 或 ZIP，并自动登记到课件表。";
+    : "通过 WorkBuddy Agent 安全导入课件，并自动登记到课件表。";
   elements.importPrompt.value = importPrompt(item);
   elements.copyStatus.hidden = true;
   elements.copyStatus.textContent = "";
@@ -477,8 +422,7 @@ function openEditDialog(item: CoursewareItem): void {
   elements.editName.value = item.name;
   elements.editNote.value = item.note;
   elements.editMeta.replaceChildren();
-  appendReadonlyMeta("原始文件", item.originalFileName || "未记录");
-  appendReadonlyMeta("格式与版本", `${item.format} · v${item.version}`);
+  appendReadonlyMeta("当前版本", `v${item.version}`);
   appendReadonlyMeta("更新时间", formatDate(item.updatedAt));
   elements.editStatus.hidden = true;
   elements.editStatus.textContent = "";
@@ -628,7 +572,6 @@ function registerEvents(): void {
 
 export async function startCourseware(): Promise<void> {
   registerEvents();
-  renderFilters();
   hideNotice();
   await loadCourseware();
 }

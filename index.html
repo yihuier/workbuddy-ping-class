@@ -321,7 +321,7 @@
                 导入课件
               </button>
             </div>
-            <span class="desc">课件内容以独立 WorkBuddy Page 保存；这里管理课件名称、链接和版本索引。HTML 或 ZIP 由 WorkBuddy Agent 按官方流程导入。</span>
+            <span class="desc">课件内容以独立 WorkBuddy Page 保存；这里统一管理课件名称、链接和版本索引，文件解析与导入由 WorkBuddy Agent 自动完成。</span>
           </div>
 
           <div class="inline-notice" id="courseware-notice" role="status" aria-live="polite" hidden></div>
@@ -333,9 +333,8 @@
                 <circle cx="11" cy="11" r="8" />
                 <line x1="21" y1="21" x2="16.65" y2="16.65" />
               </svg>
-              <input type="search" id="courseware-search-input" placeholder="搜索课件名称、文件名或备注…" autocomplete="off" />
+              <input type="search" id="courseware-search-input" placeholder="搜索课件名称或备注…" autocomplete="off" />
             </label>
-            <div class="filter-chips courseware-filters" id="courseware-filters" aria-label="按课件格式筛选"></div>
             <span
               class="toolbar-count"
               id="courseware-count"
@@ -359,7 +358,7 @@
               <div class="modal-header">
                 <div>
                   <h2 id="courseware-import-title">导入新课件</h2>
-                  <p id="courseware-import-description">通过 WorkBuddy Agent 安全导入 HTML 或 ZIP，并自动登记到课件表。</p>
+                  <p id="courseware-import-description">通过 WorkBuddy Agent 安全导入课件，并自动登记到课件表。</p>
                 </div>
                 <button class="icon-button" id="close-courseware-import" type="button" aria-label="关闭课件导入说明">
                   <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -375,13 +374,13 @@
                 </div>
                 <ol class="courseware-import-steps">
                   <li><span>1</span><p>复制下面的导入指令。</p></li>
-                  <li><span>2</span><p>在 WorkBuddy 对话中粘贴，并附加一个不超过 50 MiB 的 HTML、HTM 或 ZIP。</p></li>
+                  <li><span>2</span><p>在 WorkBuddy 对话中粘贴，并附加一个不超过 50 MiB 的课件文件。</p></li>
                   <li><span>3</span><p>Agent 完成后回到这里刷新列表。</p></li>
                 </ol>
                 <label class="form-field">
                   <span>给 WorkBuddy Agent 的指令</span>
                   <textarea class="courseware-prompt" id="courseware-import-prompt" rows="6" readonly></textarea>
-                  <span class="form-field-hint">ZIP 必须包含至少一个 HTML/HTM 入口及其引用的同包资源。</span>
+                  <span class="form-field-hint">Agent 会自动识别并校验课件文件，无需手动选择文件类型。</span>
                 </label>
                 <p class="courseware-copy-status" id="courseware-copy-status" role="status" aria-live="polite" hidden></p>
               </div>
