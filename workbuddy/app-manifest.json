@@ -2,7 +2,7 @@
   "protocolVersion": 1,
   "appId": "io.github.yihuier.workbuddy-ping-class",
   "name": "Ping Class 教学工作台",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "repository": "https://github.com/yihuier/workbuddy-ping-class",
   "testedWorkBuddySkillLibraryVersions": ["0.5.13"],
   "page": {
@@ -71,6 +71,46 @@
         { "年级名称": { "text": "高二" }, "排序": { "number": 11 }, "新增班级时展示": { "checkbox": true }, "备注": { "text": "" } },
         { "年级名称": { "text": "高三" }, "排序": { "number": 12 }, "新增班级时展示": { "checkbox": true }, "备注": { "text": "" } }
       ]
+    },
+    "courseware": {
+      "placeholder": "__PING_CLASS_DB_COURSEWARE__",
+      "schemaVersion": 1,
+      "title": "Ping Class · 课件表",
+      "createSchema": {
+        "title": "Ping Class · 课件表",
+        "properties": [
+          { "name": "课件名称", "config": { "text": "" } },
+          { "name": "Page节点ID", "config": { "text": "" } },
+          { "name": "课件链接", "config": { "url": { "text": "", "link": "" } } },
+          { "name": "原始文件名", "config": { "text": "" } },
+          {
+            "name": "文件格式",
+            "config": {
+              "select": {
+                "options": [
+                  { "text": "HTML" },
+                  { "text": "ZIP" }
+                ]
+              }
+            }
+          },
+          { "name": "版本号", "config": { "number": 0 } },
+          { "name": "更新时间", "config": { "date": { "format": "yyyy-mm-dd hh:mm" } } },
+          { "name": "备注", "config": { "text": "" } }
+        ]
+      },
+      "requiredFields": [
+        { "name": "课件名称", "type": "text" },
+        { "name": "Page节点ID", "type": "text" },
+        { "name": "课件链接", "type": "url" },
+        { "name": "原始文件名", "type": "text" },
+        { "name": "文件格式", "type": "select" },
+        { "name": "版本号", "type": "number" },
+        { "name": "更新时间", "type": "date" },
+        { "name": "备注", "type": "text" }
+      ],
+      "seedPolicy": "never",
+      "seedRecords": []
     },
     "students": {
       "placeholder": "__PING_CLASS_DB_STUDENTS__",
@@ -160,6 +200,14 @@
     },
     {
       "database": "grades",
+      "fromSchemaVersion": 0,
+      "toSchemaVersion": 1,
+      "operations": [
+        { "type": "createDatabase" }
+      ]
+    },
+    {
+      "database": "courseware",
       "fromSchemaVersion": 0,
       "toSchemaVersion": 1,
       "operations": [

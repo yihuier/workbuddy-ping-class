@@ -7,7 +7,7 @@
     <meta name="ping-class-version" content="__PING_CLASS_APP_VERSION__" />
     <meta
       name="description"
-      content="教学工作台：周课表、课程安排、班级学生名册、题库与教学资源的统一工作空间。"
+      content="教学工作台：周课表、网页课件、课程安排、班级学生名册、题库与教学资源的统一工作空间。"
     />
     <title>教学工作台</title>
   </head>
@@ -51,6 +51,17 @@
             </svg>
             <span>课程管理</span>
             <span class="tag">建设中</span>
+          </button>
+
+          <button class="nav-item" type="button" data-page="courseware" aria-controls="page-courseware" aria-selected="false">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <rect x="3" y="4" width="18" height="14" rx="2" />
+              <line x1="8" y1="22" x2="16" y2="22" />
+              <line x1="12" y1="18" x2="12" y2="22" />
+              <path d="m10 8 5 3-5 3z" />
+            </svg>
+            <span>课件管理</span>
+            <span class="tag live">已上线</span>
           </button>
 
           <button class="nav-item" type="button" data-page="student" aria-controls="page-student" aria-selected="false">
@@ -291,6 +302,158 @@
             <p>这里将展示你的授课安排列表：每行对应某班某天的一节课，选定课件即可排课，同一课件多班复用。</p>
             <span class="hint">建成后将自动展示课程列表</span>
           </div>
+        </section>
+
+        <section class="page" id="page-courseware" aria-labelledby="courseware-heading">
+          <div class="page-header">
+            <h1 id="courseware-heading">课件管理</h1>
+            <span class="badge live">已上线</span>
+            <div class="page-header-actions">
+              <button class="secondary-button" id="refresh-courseware-button" type="button" disabled>
+                刷新列表
+              </button>
+              <button class="primary-button" id="import-courseware-button" type="button" disabled>
+                <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M12 3v12" />
+                  <polyline points="7 8 12 3 17 8" />
+                  <path d="M5 15v4a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-4" />
+                </svg>
+                导入课件
+              </button>
+            </div>
+            <span class="desc">课件内容以独立 WorkBuddy Page 保存；这里管理课件名称、链接和版本索引。HTML 或 ZIP 由 WorkBuddy Agent 按官方流程导入。</span>
+          </div>
+
+          <div class="inline-notice" id="courseware-notice" role="status" aria-live="polite" hidden></div>
+
+          <div class="courseware-toolbar">
+            <label class="search-box courseware-search">
+              <span class="sr-only">搜索课件</span>
+              <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <circle cx="11" cy="11" r="8" />
+                <line x1="21" y1="21" x2="16.65" y2="16.65" />
+              </svg>
+              <input type="search" id="courseware-search-input" placeholder="搜索课件名称、文件名或备注…" autocomplete="off" />
+            </label>
+            <div class="filter-chips courseware-filters" id="courseware-filters" aria-label="按课件格式筛选"></div>
+            <span
+              class="toolbar-count"
+              id="courseware-count"
+              aria-live="polite"
+              data-sp-bindable="database"
+              data-sp-database-id="__PING_CLASS_DB_COURSEWARE__"
+            ></span>
+          </div>
+
+          <div
+            class="courseware-panel"
+            data-sp-bindable="database"
+            data-sp-database-id="__PING_CLASS_DB_COURSEWARE__"
+          >
+            <div class="courseware-grid" id="courseware-grid" role="list"></div>
+            <div class="courseware-empty" id="courseware-empty" hidden></div>
+          </div>
+
+          <dialog class="modal courseware-import-dialog" id="courseware-import-dialog" aria-labelledby="courseware-import-title">
+            <div class="modal-card">
+              <div class="modal-header">
+                <div>
+                  <h2 id="courseware-import-title">导入新课件</h2>
+                  <p id="courseware-import-description">通过 WorkBuddy Agent 安全导入 HTML 或 ZIP，并自动登记到课件表。</p>
+                </div>
+                <button class="icon-button" id="close-courseware-import" type="button" aria-label="关闭课件导入说明">
+                  <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <line x1="18" y1="6" x2="6" y2="18" />
+                    <line x1="6" y1="6" x2="18" y2="18" />
+                  </svg>
+                </button>
+              </div>
+              <div class="modal-body">
+                <div class="courseware-import-boundary">
+                  <strong>为什么不在这里直接选择文件？</strong>
+                  <p>当前 WorkBuddy Page SDK 没有文件导入接口。课件必须交给 WorkBuddy Agent 导入，才能保存为可长期访问和更新的 Page。</p>
+                </div>
+                <ol class="courseware-import-steps">
+                  <li><span>1</span><p>复制下面的导入指令。</p></li>
+                  <li><span>2</span><p>在 WorkBuddy 对话中粘贴，并附加一个不超过 50 MiB 的 HTML、HTM 或 ZIP。</p></li>
+                  <li><span>3</span><p>Agent 完成后回到这里刷新列表。</p></li>
+                </ol>
+                <label class="form-field">
+                  <span>给 WorkBuddy Agent 的指令</span>
+                  <textarea class="courseware-prompt" id="courseware-import-prompt" rows="6" readonly></textarea>
+                  <span class="form-field-hint">ZIP 必须包含至少一个 HTML/HTM 入口及其引用的同包资源。</span>
+                </label>
+                <p class="courseware-copy-status" id="courseware-copy-status" role="status" aria-live="polite" hidden></p>
+              </div>
+              <div class="modal-footer split-footer">
+                <button class="secondary-button" id="cancel-courseware-import" type="button">关闭</button>
+                <span class="modal-footer-spacer"></span>
+                <button class="secondary-button" id="courseware-imported-refresh" type="button">已完成，刷新列表</button>
+                <button class="primary-button" id="copy-courseware-prompt" type="button">复制导入指令</button>
+              </div>
+            </div>
+          </dialog>
+
+          <dialog class="modal" id="courseware-edit-dialog" aria-labelledby="courseware-edit-title">
+            <form class="modal-card" id="courseware-edit-form">
+              <div class="modal-header">
+                <div>
+                  <h2 id="courseware-edit-title">编辑课件信息</h2>
+                  <p>这里只更新课件索引，不修改课件 Page 的内容。</p>
+                </div>
+                <button class="icon-button" id="close-courseware-edit" type="button" aria-label="关闭编辑课件窗口">
+                  <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <line x1="18" y1="6" x2="6" y2="18" />
+                    <line x1="6" y1="6" x2="18" y2="18" />
+                  </svg>
+                </button>
+              </div>
+              <div class="modal-body">
+                <label class="form-field">
+                  <span>课件名称 <span aria-hidden="true">*</span></span>
+                  <input id="courseware-edit-name" name="coursewareName" type="text" maxlength="100" autocomplete="off" required />
+                </label>
+                <label class="form-field">
+                  <span>备注</span>
+                  <textarea id="courseware-edit-note" name="coursewareNote" rows="4" maxlength="500" placeholder="选填，例如：适用班级或章节"></textarea>
+                </label>
+                <dl class="courseware-readonly-meta" id="courseware-edit-meta"></dl>
+                <p class="form-status" id="courseware-edit-status" role="alert" hidden></p>
+              </div>
+              <div class="modal-footer">
+                <button class="secondary-button" id="cancel-courseware-edit" type="button">取消</button>
+                <button class="primary-button" id="submit-courseware-edit" type="submit">保存修改</button>
+              </div>
+            </form>
+          </dialog>
+
+          <dialog class="modal" id="courseware-remove-dialog" aria-labelledby="courseware-remove-title">
+            <div class="modal-card">
+              <div class="modal-header">
+                <div>
+                  <h2 id="courseware-remove-title">移除课件索引</h2>
+                  <p>这不会删除 WorkBuddy 中已经导入的课件 Page。</p>
+                </div>
+                <button class="icon-button" id="close-courseware-remove" type="button" aria-label="关闭移除课件窗口">
+                  <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <line x1="18" y1="6" x2="6" y2="18" />
+                    <line x1="6" y1="6" x2="18" y2="18" />
+                  </svg>
+                </button>
+              </div>
+              <div class="modal-body">
+                <div class="courseware-remove-warning">
+                  <strong id="courseware-remove-name"></strong>
+                  <p>确认后只会从课件管理列表删除这条资料表记录。课件 Page 仍会保留，可由 WorkBuddy Agent 重新登记。</p>
+                </div>
+                <p class="form-status" id="courseware-remove-status" role="alert" hidden></p>
+              </div>
+              <div class="modal-footer">
+                <button class="secondary-button" id="cancel-courseware-remove" type="button">取消</button>
+                <button class="danger-button" id="confirm-courseware-remove" type="button">仅移除索引</button>
+              </div>
+            </div>
+          </dialog>
         </section>
 
         <section class="page" id="page-student" aria-labelledby="student-heading">

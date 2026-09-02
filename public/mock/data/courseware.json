@@ -1,0 +1,30 @@
+[
+  {
+    "_id": "demo_courseware_fraction",
+    "课件名称": "示例课件 · 分数的意义",
+    "Page节点ID": "demo_page_fraction",
+    "课件链接": {
+      "text": "打开示例课件",
+      "link": "http://127.0.0.1:5173/#demo-courseware-fraction"
+    },
+    "原始文件名": "fractions.html",
+    "文件格式": "HTML",
+    "版本号": 1,
+    "更新时间": "2026-08-28T09:30:00+08:00",
+    "备注": "公开合成演示数据，不对应真实教师课件。"
+  },
+  {
+    "_id": "demo_courseware_geometry",
+    "课件名称": "示例课件 · 几何图形复习",
+    "Page节点ID": "demo_page_geometry",
+    "课件链接": {
+      "text": "打开示例课件",
+      "link": "http://127.0.0.1:5173/#demo-courseware-geometry"
+    },
+    "原始文件名": "geometry-review.zip",
+    "文件格式": "ZIP",
+    "版本号": 3,
+    "更新时间": "2026-08-30T15:20:00+08:00",
+    "备注": "ZIP 内包含 HTML、样式和图片资源。"
+  }
+]

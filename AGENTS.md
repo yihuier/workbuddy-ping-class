@@ -6,7 +6,7 @@
 
 Ping Class 是面向 WorkBuddy 资料库 Page 的 TypeScript 教学工作台。源码由 Vite 组织，开发环境安装与线上 `window.__SMART_PAGE__.database` 形态一致的 Mock，生产环境输出可按用户数据库映射渲染的单文件 HTML 模板。
 
-当前已实现课表管理和班级管理；新增班级的年级选项来自独立年级配置表，并使用自定义 Combobox。课程管理、题库管理与教学资源仍是可继续开发的模块。当前页面行为只是版本现状，不是对月视图、多教师、临时调课、新页面或新资料表的永久限制。
+当前已实现课表管理、班级管理和课件管理；新增班级的年级选项来自独立年级配置表，并使用自定义 Combobox。课件内容由 WorkBuddy Agent 导入为独立 Page，`courseware` 表只保存可查询索引。课程管理、题库管理与教学资源仍是可继续开发的模块。当前页面行为只是版本现状，不是对月视图、多教师、临时调课、新页面或新资料表的永久限制。
 
 ## 事实来源与优先级
 
@@ -21,7 +21,7 @@ WorkBuddy skill-library 版本变化时，先比较 Database SDK、HTML 导入�
 
 - `workbuddy/app-manifest.json` 是应用版本、数据库 binding、canonical schema、seed policy 和 migration 的唯一公开声明源。
 - `databaseBindings` 是可扩展集合，不得在安装器、构建脚本、状态文档或说明文字中假设固定数量。
-- 当前业务使用 `classes`、`grades`、`students`、`lessonSlots` 和 `weeklyTimetable` 等 alias；它们是当前功能依赖，不是封闭清单。
+- 当前业务使用 `classes`、`grades`、`courseware`、`students`、`lessonSlots` 和 `weeklyTimetable` 等 alias；它们是当前功能依赖，不是封闭清单。
 - 源码中的 `databaseId` 必须直接使用对应 manifest placeholder 字符串字面量。目标用户安装时再把所有 placeholder 渲染为该用户的实际 databaseId，确保官方解析器可识别。
 - `workbuddy.config.json` 只保存公共构建路径，不保存 databaseId。
 - 维护者个人映射只写入已忽略的 `workbuddy.local.json`。不得把真实 databaseId、真实 schema 快照或用户业务数据提交到公共仓库。
@@ -38,6 +38,7 @@ WorkBuddy skill-library 版本变化时，先比较 Database SDK、HTML 导入�
 - 查询必须完整处理 `hasMore` 和 `nextCursor`。
 - 数据库展示值遵守 `data-sp-bindable="database"` 与 `data-sp-database-id` 标注契约。
 - 最终模板与目标用户渲染产物均为单文件 HTML；业务脚本必须位于 `<body>`，不得依赖外部 JS/CSS 或未托管的第三方图片。
+- Page 运行时没有文件导入 API。课件 HTML/ZIP 必须由 `workbuddy/COURSEWARE_IMPORT.md` 编排当前 WorkBuddy 官方 Page 导入流程；不得把文件、Base64 或本地路径塞进资料表 text 字段，也不得用本地浏览器存储冒充线上课件库。
 - 不直接编辑 `dist/` 或 `release/`。它们都是已忽略的生成物。
 - 新功能应保持模块边界清晰；不要因为当前导航或数据模型而禁止未来功能扩展。
 
@@ -93,6 +94,7 @@ npm run package:workbuddy
 ## 安装与发布规则
 
 - 公共安装入口是 `workbuddy/AGENT_INSTALL.md`；它必须遍历 manifest 当前声明的全部 binding。
+- 课件导入与更新入口是 `workbuddy/COURSEWARE_IMPORT.md`；它只能复用已激活安装中的 `courseware` binding，不得自行建表、发布或删除 Page。
 - 安装状态中的数据库映射动态按 alias 保存，不得写死 alias 或数量。
 - 页面更新复用原 `nodeBlockId`，数据库只执行协议允许的声明式迁移，不覆盖用户业务记录。
 - `package.json` 与 app manifest 的 SemVer 必须一致，发布 tag 为对应的 `vX.Y.Z`。

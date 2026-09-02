@@ -161,6 +161,17 @@ try {
     }
   }
 
+  if (isObject(manifest.databaseBindings.courseware)) {
+    for (const requiredPath of [
+      "public/mock/data/courseware.json",
+      "workbuddy/COURSEWARE_IMPORT.md",
+    ]) {
+      if (!contents.has(requiredPath)) {
+        throw new Error(`课件功能缺少公共文件：${requiredPath}`);
+      }
+    }
+  }
+
   process.stdout.write(
     `公开仓库检查通过（${publicFiles.length} 个文件，${Object.keys(manifest.databaseBindings).length} 个当前数据库绑定）\n`,
   );
