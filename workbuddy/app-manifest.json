@@ -2,7 +2,7 @@
   "protocolVersion": 1,
   "appId": "io.github.yihuier.workbuddy-ping-class",
   "name": "Ping Class 教学工作台",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "repository": "https://github.com/yihuier/workbuddy-ping-class",
   "testedWorkBuddySkillLibraryVersions": ["0.5.13"],
   "page": {
